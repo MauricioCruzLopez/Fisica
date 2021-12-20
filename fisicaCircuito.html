@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>ResuelveCircuito</title>
+        <style>
+          section{
+            text-align: center;
+            width:10%; 
+            height: max-content; 
+            float: left; margin-left: 1%; 
+            border: rgb(158, 90, 67);
+            background-color: rgba(233, 150, 122, 0.904);
+          }
+        </style>
+    </head>
+    <body style="background-color: rgb(51, 119, 146);  ">
+        <h1 style="text-align: center; color:rgba(15, 14, 14, 0.959)"><u>Resuelve circuito</u></h1>
+        <div style="float: left; height:max-content; background-color: blue; margin-left: 3%;">
+            <img src="Circuito.png" alt="Circuito guia." >
+        </div>
+        <div style="text-align: center; float: left; margin-left: 5%;">
+            <label for="fuente"><strong>Fuente</strong> </label><input id="fuente" type="text"><br><br>
+            <h3 style="margin-top:1%;">Resistencias</h3>
+            <label for="resist1"><strong>R1</strong> </label><input id="resist1" type="text"><br>
+            <label for="resist2"><strong>R2</strong> </label><input id="resist2" type="text"><br>
+            <label for="resist3"><strong>R3</strong> </label><input id="resist3" type="text"><br><br>
+            <input id="calcula" type="button" value="Calcular" onclick="opera()"> <br><br>
+            <h3 style="margin-top:1%;">Intensidades</h3>
+            <label for="intensidad1"><strong>I1</strong> </label><input id="intensidad1" type="text"><br>
+            <label for="intensidad2"><strong>I2</strong> </label><input id="intensidad2" type="text"><br>
+            <label for="intensidad3"><strong>I3</strong> </label><input id="intensidad3" type="text"><br>
+        </div>
+        
+        <section>
+          <p><u style="color: darkgreen;"><strong>Nota</strong></u><br>La resolución del circuito se basa<br> en la imágen a la izquierda</p>
+        </section>
+        <script>
+            function sistEc2X2(R1,R2,R3,R13,fuente){ /*fuente es para ecuación 1*/
+                /*{R1.I1 + R2.I2 = fuente
+                  {R13I1 + R3.I2 = fuente | R3= -R3*/
+                var I1,I2;
+                var cosiente;     
+                if(R13<R1){
+                    cosiente=R1/R13;
+                    cosiente=-cosiente;
+                    /*R13.I1.(cosiente) + R3.I2.(cosiente) = fuente.(cosiente)*/
+                    R13=R13*cosiente;
+                    R3=R3*cosiente;
+                    var fuenteEc2=fuente*cosiente;
+                    /*sumo las dos ecuaciones: R13.I1 + R1.I1 = 0 | R2.I2 + R3.I2 = R23.I2 | fuente+fuenteEc2=fuente12*/
+                    var R23=R2+R3;
+                    var fuente12=fuente+fuenteEc2;
+                    /*R23.I2=fuente12 <--> I2=fuente12/R23*/
+                    I2=fuente12/R23;
+                    /*sustituyo I2 en la primera ecuación:
+                      R1.I1 + R2.(I2=fuente12/R23) = fuente | I1=(fuente-(R2.I2))/R1 */
+                    I1=(fuente-(R2*I2))/R1;
+                    document.getElementById("intensidad1").value=I1;
+                    document.getElementById("intensidad2").value=I2;
+                } 
+                /*{R1.I1 + R2.I2 = fuente
+                  {R13I1 + R3.I2 = fuente | R3= -R3*/
+                if(R13>R1){
+                    cosiente=R13/R1;
+                    cosiente=-cosiente;
+                    /*R1.I1.(cosiente) + R2.I2.(cosiente) = fuente.(cosiente)*/
+                    R1=R1*cosiente;
+                    R2=R2*cosiente;
+                    var fuenteEc1=fuente*cosiente;
+                    /*sumo las dos ecuaciones: R13.I1 + R1.I1 = 0 | R2.I2 + R3.I2 = R23.I2 | fuente+fuenteEc1=fuente12*/
+                    var R23=R2+R3;
+                    var fuente12=fuente+fuenteEc1;
+                    /*R23.I2=fuente12 <--> I2=fuente12/R23*/
+                    I2=fuente12/R23;
+                    /*sustituyo I2 en la segunda ecuación:
+                      R13.I1 + R3.(I2=fuente12/R23) = fuente | I1=(fuente-(R3.I2))/R13 */
+                      I1=(fuente-(R3*I2))/R13;
+                    document.getElementById("intensidad1").value=I1;
+                    document.getElementById("intensidad2").value=I2;
+                } 
+                if(R13==R1){ /*R1-R13=0*/
+                    cosiente=-R13;
+                    /*R13.I1.(cosiente) + R3.I2.(cosiente) = fuente.(cosiente)*/
+                    R13=R13*cosiente;
+                    R3=R3*cosiente;
+                    var fuenteEc2=fuente*cosiente;
+                    /*sumo las dos ecuaciones: R13.I1 + R1.I1 = 0 | R2.I2 + R3.I2 = R23.I2 | fuente+fuenteEc2=fuente12*/
+                    var R23=R2+R3;
+                    var fuente12=fuente+fuenteEc2;
+                    /*R23.I2=fuente12 <--> I2=fuente12/R23*/
+                    I2=fuente12/R23;
+                    /*sustituyo I2 en la primera ecuación:
+                      R1.I1 + R2.(I2=fuente12/R23) = fuente | I1=(fuente-(R2.I2))/R1 */
+                    I1=(fuente-(R2*I2))/R1;
+                    document.getElementById("intensidad1").value=I1;
+                    document.getElementById("intensidad2").value=I2;
+                }      
+            }
+            function opera(){
+                /*Vab+Vbc+Vca=0|-fuente + R1.I1 + R2.I2 =0  (A)
+              Vab+Vbc+Vca=0|-fuente + R1.I1 + R3.I3 =0  (B)
+              I1-I2-I3=0 <--> I3=I1-I2 --> (sustituyo en (B) -fuente + R1.I1 + R3(I1-I2)=0 <-->
+              <--> -fuente + R1.I1 + R3.I1 - R3.I2=0 <--> -fuente + (R1+R3)I1 - R3.I2=0
+              {R1.I1 + R2.I2 = fuente
+              {(R1+R3)I1 - R3.I2 = fuente
+              llamo función para hacer sistemas de ecuaciones 2x2
+              I1=x1, I2=x2 --> I3=x1-x2 <--> I3=x3 */ 
+              var fuente=parseFloat(document.getElementById("fuente").value);
+              var R1=parseFloat(document.getElementById("resist1").value);
+              var R2=parseFloat(document.getElementById("resist2").value);
+              var R3=parseFloat(document.getElementById("resist3").value);
+              var R13=R1+R3; /*I1*/
+              R3= -R3; /*I2*/
+              sistEc2X2(R1,R2,R3,R13,fuente);
+              var I1,I2;
+              I1=parseFloat(document.getElementById("intensidad1").value);
+              I2=parseFloat(document.getElementById("intensidad2").value);
+              var I3=I1-I2;
+              document.getElementById("intensidad3").value=I3;
+            }
+            
+        </script>
+    </body>
+</html>
